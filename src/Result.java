@@ -4,7 +4,9 @@ public class Result extends Node {
     {
         this.val=val;
     }
-
+    public Node getNode(){
+        return val;
+    }
     @Override
     public String toString() {
         return "Result{" +

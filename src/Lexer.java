@@ -11,7 +11,6 @@ public class Lexer {
     private String lexem;
     private boolean EOS = false;
     private String errorMessage = "";
-    private Set<Character> blankChars = new HashSet<Character>();
     private List<TokenStore> tokenStoreList= new ArrayList<>();
     private List<Pattern> listofpatterns= new ArrayList<Pattern>();
     private List<String> listofnames= new ArrayList<>();
@@ -21,6 +20,8 @@ public class Lexer {
         return lexer;
     }
     private Lexer(String input){
+        listofpatterns.add(Pattern.compile("^" + "if"));
+        listofnames.add("EOF");
         listofpatterns.add(Pattern.compile("^" + "if"));
         listofnames.add("IFTOKEN");
         listofpatterns.add(Pattern.compile("^" + "\\d+(\\.\\d+)?"));
@@ -105,7 +106,9 @@ public class Lexer {
             return null;
         }else{
             List<TokenStore> toks=lexer.getTokens();
+            toks.add(new TokenStore("EOF","EOF"));
             return toks;
+
         }
 
     }
