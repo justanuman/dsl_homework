@@ -32,22 +32,35 @@ public class Parser {
         }
         return current;
     }
-
+    public TokenStore goBack() {
+        if (pos > 0) {
+            pos -= 1;
+            current = toks.get(pos);
+        }
+        return current;
+    }
+    public TokenStore checkNext() {
+        if (pos < toks.size() - 1) {
+             return toks.get(pos+1);
+        }
+        return null;
+    }
     public Node basic() {
         parser.advance();
         if ((current.type).equals("NUMBER")) {
             //System.out.println(" baza activated");
             currBasic = new BasicNode(current);
             parser.advance();
-            return currBasic;}
-        else if ((current.type).equals("LPRT")) {
-
+            return currBasic;
+        } else if ((current.type).equals("LPRT")) {
+            while (((parser.checkNext()).type).equals("LPRT")) {
+                parser.advance();
+            }
             BinaryOpNode temp = (BinaryOpNode) parser.expr();
             if ((current.type).equals("RPRT")) {
-                //System.out.println(" () activated");
+                System.out.println(" () activated");
                 parser.advance();
                 return temp;
-
             }
         }
         System.out.println("error something");
@@ -82,7 +95,7 @@ public class Parser {
     }
 
     public static void main(String[] args) {
-        Lexer lex = Lexer.LexInit("1 + (2+3)*5 + ((8-9))");
+        Lexer lex = Lexer.LexInit("(1 +  (2+3)*4) + (5-6) ");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser par = Parser.Init(toks);
