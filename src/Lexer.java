@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class Lexer {
     private StringBuilder input = new StringBuilder();
-    private Token token;
     private String lexem;
     private boolean EOS = false;
     private String errorMessage = "";
