@@ -21,8 +21,6 @@ public class Lexer {
     }
     private Lexer(String input){
         listofpatterns.add(Pattern.compile("^" + "if"));
-        listofnames.add("EOF");
-        listofpatterns.add(Pattern.compile("^" + "if"));
         listofnames.add("IFTOKEN");
         listofpatterns.add(Pattern.compile("^" + "\\d+(\\.\\d+)?"));
         listofnames.add("NUMBER");
