@@ -3,6 +3,8 @@ public class TokenStore {
     public String val;
     public TokenStore left;
     public TokenStore right;
+    public int startPos;
+    public int endPos;
     public TokenStore(String type, String val){
         this.type=type;
         this.val =val;

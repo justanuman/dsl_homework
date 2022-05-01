@@ -2,11 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-* basic = int ()
+*
 * expr  =term ((PLUS|MINUS) term)*
+* varName= expr
   term = basic ((MUL|DIV) basic)*
+  basic = int () / id
   basic =   + - basic
   basic = ( expr )
+  *
  */
 public class Parser {
     private List<TokenStore> toks = new ArrayList<>();
@@ -58,7 +61,7 @@ public class Parser {
             }
             BinaryOpNode temp = (BinaryOpNode) parser.expr();
             if ((current.type).equals("RPRT")) {
-                System.out.println(" () activated");
+                //System.out.println(" () activated");
                 parser.advance();
                 return temp;
             }
@@ -87,11 +90,9 @@ public class Parser {
         return left;
     }
 
-    public Node parse() {
+    public Result parse() {
         Result res = new Result(parser.expr());
         return res;
-
-
     }
 
     public static void main(String[] args) {

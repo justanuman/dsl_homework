@@ -1,4 +1,4 @@
-public class BasicNode extends Node {
+public class BasicNode extends Node implements Inode {
     public TokenStore tok;
     public String val;
     public String type;
@@ -9,7 +9,9 @@ public class BasicNode extends Node {
         val=tok.val;
         type= tok.type;
     }
-
+    public String getNodeType(){
+        return "baseNode";
+    }
     @Override
     public String toString() {
         return val;

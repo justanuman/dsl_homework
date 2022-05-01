@@ -106,7 +106,7 @@ public class Lexer {
             return null;
         }else{
             List<TokenStore> toks=lexer.getTokens();
-            toks.add(new TokenStore("EOF","EOF"));
+            //toks.add(new TokenStore("EOF","EOF"));
             return toks;
 
         }

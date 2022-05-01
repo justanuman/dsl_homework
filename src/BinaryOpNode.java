@@ -8,7 +8,15 @@ public class BinaryOpNode extends Node {
         this.right=right;
         this.op=op;
     }
-
+    public String getNodeType(){
+        return "binNode";
+    }
+    public Node getLeft(){
+        return left;
+    }
+    public Node getRight(){
+        return right;
+    }
     @Override
     public String toString() {
         return "{" +
