@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 public class Lexer {
     private StringBuilder input = new StringBuilder();
-    private Token token;
     private String lexem;
     private boolean EOS = false;
     private String errorMessage = "";
@@ -20,8 +19,6 @@ public class Lexer {
         return lexer;
     }
     private Lexer(String input){
-        listofpatterns.add(Pattern.compile("^" + "if"));
-        listofnames.add("EOF");
         listofpatterns.add(Pattern.compile("^" + "if"));
         listofnames.add("IFTOKEN");
         listofpatterns.add(Pattern.compile("^" + "\\d+(\\.\\d+)?"));
