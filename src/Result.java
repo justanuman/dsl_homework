@@ -9,8 +9,6 @@ public class Result extends Node {
     }
     @Override
     public String toString() {
-        return "Result{" +
-                 val +
-                '}';
+        return ">"+val;
     }
 }

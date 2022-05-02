@@ -19,6 +19,18 @@ public class Lexer {
         return lexer;
     }
     private Lexer(String input){
+        listofpatterns.add(Pattern.compile("^" + "AND"));
+        listofnames.add("AND");
+        listofpatterns.add(Pattern.compile("^" + "OR"));
+        listofnames.add("OR");
+        listofpatterns.add(Pattern.compile("^" + "TRUE"));
+        listofnames.add("TRUETOKEN");
+        listofpatterns.add(Pattern.compile("^" + "FALSE"));
+        listofnames.add("TOKEN");
+        listofpatterns.add(Pattern.compile("^" + "not"));
+        listofnames.add("NOTTOKEN");
+        listofpatterns.add(Pattern.compile("^" + "=="));
+        listofnames.add("EQUALSTOKEN");
         listofpatterns.add(Pattern.compile("^" + "if"));
         listofnames.add("IFTOKEN");
         listofpatterns.add(Pattern.compile("^" + "\\d+(\\.\\d+)?"));
@@ -43,6 +55,15 @@ public class Lexer {
         listofnames.add("LPRT");
         listofpatterns.add(Pattern.compile("^" + "\\)"));
         listofnames.add("RPRT");
+        listofpatterns.add(Pattern.compile("^" + ">"));
+        listofnames.add("MORETOKEN");
+        listofpatterns.add(Pattern.compile("^" + "<"));
+        listofnames.add("LESSTOKEN");
+        listofpatterns.add(Pattern.compile("^" + ">="));
+        listofnames.add("MOREOREQTOKEN");
+        listofpatterns.add(Pattern.compile("^" + "<="));
+        listofnames.add("LESSOREQTOKEN");
+
         this.input.append(input);
     }
 
@@ -103,7 +124,7 @@ public class Lexer {
             return null;
         }else{
             List<TokenStore> toks=lexer.getTokens();
-            //toks.add(new TokenStore("EOF","EOF"));
+            toks.add(new TokenStore("EOF","EOF"));
             return toks;
 
         }
@@ -116,7 +137,7 @@ public class Lexer {
         }
         List<TokenStore> toks=  lexer.getTokens();
         for(int i=0;i<toks.size();i++){
-            System.out.println(toks.get(i));
+            System.out.println(toks.get(i)+(toks.get(i)).type);
         }
         System.out.println(lexer.errorMessage);
     }

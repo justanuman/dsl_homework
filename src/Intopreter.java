@@ -4,7 +4,7 @@ public class Intopreter {
     private Result ast;
     private Node currNode;
     private static Intopreter intopreter;
-
+    private int res=0;
     public static Intopreter initIntpr(Result ast)
     {
         intopreter=  new Intopreter(ast);
@@ -18,49 +18,58 @@ public class Intopreter {
     public void start(){
         intopreter.checkNode(currNode);
     }
-    public TokenStore checkNode(Node current){
+    public IntVal checkNode(Node current){
         if (current.getNodeType()=="baseNode"){
             return intopreter.proccessBasic((BasicNode) current);
         }else if (current.getNodeType()=="binNode"){
-            intopreter.proccessBinop((BinaryOpNode) current);
+            return intopreter.proccessBinop((BinaryOpNode) current);
         }
         return null;
     }
-    public void proccessBinop(BinaryOpNode current){
-        IntVal intv = new IntVal();
+    public IntVal proccessBinop(BinaryOpNode current){
         //System.out.println(current.toString());
         int res=0;
-        TokenStore left= intopreter.checkNode(current.getLeft());
-        TokenStore right= intopreter.checkNode(current.getRight());
+        IntVal left= intopreter.checkNode(current.getLeft());
+        IntVal right= intopreter.checkNode(current.getRight());
         String op =current.op.val;
-        if(op.equals("+")){
-            res= intv.addition(left,right);
+        if(op.equals("+")&& left!=null){
+            res= left.addition(right);
         }
-        else if(op.equals("-"))
+        else if(op.equals("-") && left!=null)
         {
-            res= intv.substraction(left,right);
+            res=left.substraction(right);
         }
-        else if(op == "*")
+        else if(op.equals("*") && left!=null)
         {
-            res= intv.multiplication(left,right);
+            res= left.multiplication(right);
         }
-        else if(op == "/")
+        else if(op.equals("/") && left!=null)
         {
-            res= intv.division(left,right);
+            res= left.division(right);
         }
-        System.out.println(res);
+        this.res=res;
+        return new IntVal(res);
+        //System.out.println(this.res);
 
     }
-    public TokenStore proccessBasic(BasicNode current){
-        return current.tok;
+    public IntVal proccessBasic(BasicNode current){
+        System.out.println(current.toString());
+        return new IntVal(current.tok.val);
     }
+
+    public int getRes() {
+        return res;
+    }
+
     public void processUno(){}
     public static void main(String[] args) {
-        Lexer lex = Lexer.LexInit("5+6");
+        Lexer lex = Lexer.LexInit("5+2*5");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser par = Parser.Init(toks);
+        //System.out.println((par.parse()).toString());
         Intopreter intpr = Intopreter.initIntpr(par.parse());
         intpr.start();
+        System.out.println(intpr.getRes());
     }
 }

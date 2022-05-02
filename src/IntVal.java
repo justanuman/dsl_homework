@@ -1,23 +1,26 @@
-public class IntVal {
-    private int val=0;
+public class IntVal extends ValueStore{
+    public int val=1;
     private int res=0;
-    public IntVal(){
+    public IntVal(String val){
+        this.val=Integer.valueOf(val);
     }
-    public int addition(TokenStore tok,TokenStore tok2){
-        res=Integer.valueOf(tok.val)+Integer.valueOf(tok2.val);
+    public IntVal(int val){
+        this.val=val;
+    }
+    public int addition(IntVal right){
+        res=val+right.val;
         return res;
     }
-    public int substraction(TokenStore tok,TokenStore tok2){
-        res=Integer.valueOf(tok.val)-Integer.valueOf(tok2.val);
-        System.out.println("works");
+    public int substraction(IntVal right){
+        res=val-right.val;
         return res;
     }
-    public int multiplication(TokenStore tok,TokenStore tok2){
-        res=Integer.valueOf(tok.val)*Integer.valueOf(tok2.val);
+    public int multiplication(IntVal right){
+        res=val*right.val;
         return res;
     }
-    public int division(TokenStore tok,TokenStore tok2){
-        res=Integer.valueOf(tok.val)/Integer.valueOf(tok2.val);
+    public int division(IntVal right){
+        res=val/right.val;
         return res;
     }
 }

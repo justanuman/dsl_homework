@@ -2,12 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
+*  expr:  id = expr
+*  expr: compar AND|OR compar
+* comapr expr: matexpr <|>|==|>=|<= matexpr
+* matexpr:  =term ((PLUS|MINUS) term)*
 *
-* expr  =term ((PLUS|MINUS) term)*
-* varName= expr
   term = basic ((MUL|DIV) basic)*
   basic = int () / id
-  basic =   + - basic
   basic = ( expr )
   *
  */
@@ -18,7 +19,6 @@ public class Parser {
     private Node currBasic;
     private Node currTerm;
     private static Parser parser;
-
     public static Parser Init(List<TokenStore> toks) {
         parser = new Parser(toks);
         return parser;
@@ -50,7 +50,7 @@ public class Parser {
     }
     public Node basic() {
         parser.advance();
-        if ((current.type).equals("NUMBER")) {
+        if ((current.type).equals("NUMBER") || (current.type).equals("ID")) {
             //System.out.println(" baza activated");
             currBasic = new BasicNode(current);
             parser.advance();
@@ -82,10 +82,15 @@ public class Parser {
 
     public Node expr() {
         Node left = parser.basic();
-        while ((current.type).equals("ADDITION") || (current.type).equals("SUBTRACTION")) {
+        while ((current.type).equals("ADDITION") || (current.type).equals("SUBTRACTION") ||  (current.type).equals("ATTRIBUTION") || (current.val).equals(">")|| (current.val).equals("<")
+                || (current.val).equals(">=")|| (current.val).equals("<=")|| (current.val).equals("<=")) {
             TokenStore op = current;
             Node right = parser.term();
-            left = new BinaryOpNode(left, right, op);
+            if ( (op.val).equals("=")) {
+                left = new AttributionNode(left, right);
+            }
+            else  {
+            left = new BinaryOpNode(left, right, op);}
         }
         return left;
     }
@@ -96,7 +101,7 @@ public class Parser {
     }
 
     public static void main(String[] args) {
-        Lexer lex = Lexer.LexInit("(1 +  (2+3)*4) + (5-6) ");
+        Lexer lex = Lexer.LexInit(" as = (1 +  (2+3)*4) + (5-6) ");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser par = Parser.Init(toks);
