@@ -1,7 +1,7 @@
 import java.util.List;
 
 public class Intopreter {
-    private Result ast;
+    /*private Result ast;
     private Node currNode;
     private static Intopreter intopreter;
     private int res=0;
@@ -16,12 +16,17 @@ public class Intopreter {
         this.currNode=ast.getNode();
     }
     public void start(){
+
         intopreter.checkNode(currNode);
     }
+
     public IntVal checkNode(Node current){
+        System.out.println(current.getNodeType());
         if (current.getNodeType()=="baseNode"){
+            System.out.println(current.toString());
             return intopreter.proccessBasic((BasicNode) current);
         }else if (current.getNodeType()=="binNode"){
+            System.out.println(current.toString());
             return intopreter.proccessBinop((BinaryOpNode) current);
         }
         return null;
@@ -63,13 +68,13 @@ public class Intopreter {
 
     public void processUno(){}
     public static void main(String[] args) {
-        Lexer lex = Lexer.LexInit("5+2*5");
+        Lexer lex = Lexer.LexInit("(1 +  (2+3)*4) + (5-6)");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser par = Parser.Init(toks);
         //System.out.println((par.parse()).toString());
-        Intopreter intpr = Intopreter.initIntpr(par.parse());
-        intpr.start();
-        System.out.println(intpr.getRes());
-    }
+        //Intopreter intpr = Intopreter.initIntpr(par.parse());
+       // intpr.start();
+        //System.out.println(intpr.getRes());
+    }*/
 }

@@ -3,13 +3,15 @@ public class BinaryOpNode extends Node {
     public Node right;
     public TokenStore op;
     public String nodeType="binop";
-    public BinaryOpNode(Node left, Node right, TokenStore op){
+    public BinaryOpNode(Node left, Node right, TokenStore op,String nodeType ){
         this.left=left;
         this.right=right;
         this.op=op;
+        this.nodeType=nodeType;
     }
+
     public String getNodeType(){
-        return "binNode";
+        return nodeType;
     }
     public Node getLeft(){
         return left;

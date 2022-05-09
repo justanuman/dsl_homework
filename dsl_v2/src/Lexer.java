@@ -1,6 +1,7 @@
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,15 +11,21 @@ public class Lexer {
     private String lexem;
     private boolean EOS = false;
     private String errorMessage = "";
-    private List<TokenStore> tokenStoreList= new ArrayList<>();
-    private List<Pattern> listofpatterns= new ArrayList<Pattern>();
-    private List<String> listofnames= new ArrayList<>();
+    private List<TokenStore> TokenStoreList = new ArrayList<>();
+    private List<Pattern> listofpatterns = new ArrayList<Pattern>();
+    private List<String> listofnames = new ArrayList<>();
     private static Lexer lexer;
-    public static Lexer LexInit(String input){
-        lexer= new Lexer( input);
+
+    public static Lexer LexInit(String input) {
+        lexer = new Lexer(input);
         return lexer;
     }
-    private Lexer(String input){
+
+    private Lexer(String input) {
+        listofpatterns.add(Pattern.compile("^" + "PRINT"));
+        listofnames.add("PRINT");
+        listofpatterns.add(Pattern.compile("^" + "none"));
+        listofnames.add("none");
         listofpatterns.add(Pattern.compile("^" + "then"));
         listofnames.add("thenToken");
         listofpatterns.add(Pattern.compile("^" + "else"));
@@ -35,10 +42,12 @@ public class Lexer {
         listofnames.add("TRUETOKEN");
         listofpatterns.add(Pattern.compile("^" + "FALSE"));
         listofnames.add("FALSETOKEN");
-        //listofpatterns.add(Pattern.compile("^" + "not"));
-        //listofnames.add("NOTTOKEN");
+        listofpatterns.add(Pattern.compile("^" + "!"));
+        listofnames.add("NOTTOKEN");
         listofpatterns.add(Pattern.compile("^" + "=="));
         listofnames.add("EQUALSTOKEN");
+        listofpatterns.add(Pattern.compile("^" + "!="));
+        listofnames.add("NOTEQUALSTOKEN");
         listofpatterns.add(Pattern.compile("^" + "if"));
         listofnames.add("IFTOKEN");
         listofpatterns.add(Pattern.compile("^" + "\\d+(\\.\\d+)?"));
@@ -71,7 +80,6 @@ public class Lexer {
         listofnames.add("MOREOREQTOKEN");
         listofpatterns.add(Pattern.compile("^" + "<="));
         listofnames.add("LESSOREQTOKEN");
-
         this.input.append(input);
     }
 
@@ -91,61 +99,69 @@ public class Lexer {
             errorMessage = "Unexpected symbol: '" + input.charAt(0) + "'";
         }
     }
-    private boolean findTokenFromList(){
-        for (int i=0; i<listofpatterns.size();i++){
+
+    private boolean findTokenFromList() {
+        TokenStore tok;
+        for (int i = 0; i < listofpatterns.size(); i++) {
             Matcher matcher = ((listofpatterns.get(i)).matcher(input));
-            if(matcher.find()){
+            if (matcher.find()) {
                 lexem = input.substring(0, matcher.end());
-                TokenStore tok = new TokenStore(listofnames.get(i), lexem);
-                if(!(tok.type).equals("BLANK"))
-                {
-                    tokenStoreList.add(tok);
+                if (listofnames.get(i).equals("NUMBER")) {
+                     tok = new TokenStore(listofnames.get(i), Integer.valueOf(lexem));
+                } else {
+                    tok = new TokenStore(listofnames.get(i), lexem);
                 }
-                input.delete(0, matcher.end());
-                return true;
+            if (!(tok.type).equals("BLANK")) {
+                TokenStoreList.add(tok);
             }
+            input.delete(0, matcher.end());
+            return true;
         }
-        return false;
     }
+        return false;
+}
 
 
     public boolean isSuccess() {
         return errorMessage.isEmpty();
     }
+
     public String errorMessage() {
         return errorMessage;
     }
+
     public boolean isOver() {
         return EOS;
     }
 
     public List<TokenStore> getTokens() {
-        return tokenStoreList;
+        return TokenStoreList;
     }
 
-    public List<TokenStore> startLexAnal(){
+    public List<TokenStore> startLexAnal() {
         while (!lexer.isOver()) {
             lexer.moveAhead();
         }
         if (!lexer.isSuccess()) {
             System.out.println(lexer.errorMessage());
             return null;
-        }else{
-            List<TokenStore> toks=lexer.getTokens();
-            toks.add(new TokenStore("EOF","EOF"));
+        } else {
+            List<TokenStore> toks = lexer.getTokens();
+            toks.add(new TokenStore("EOF", "EOF"));
             return toks;
 
         }
 
     }
+
     public static void main(String[] args) {
         Lexer lexer = new Lexer("*");
         while (!lexer.isOver()) {
             lexer.moveAhead();
         }
-        List<TokenStore> toks=  lexer.getTokens();
-        for(int i=0;i<toks.size();i++){
-            System.out.println(toks.get(i)+(toks.get(i)).type);
+        List<TokenStore> toks = lexer.getTokens();
+        for (int i = 0; i < toks.size(); i++) {
+            System.out.println(toks.get(i) + (toks.get(i)).type);
         }
         System.out.println(lexer.errorMessage);
     }

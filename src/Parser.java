@@ -2,22 +2,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-*  expr:  id = expr
-*  expr: compar AND|OR compar
-* comapr expr: matexpr <|>|==|>=|<= matexpr
-* matexpr:  =term ((PLUS|MINUS) term)*
-*
-  term = basic ((MUL|DIV) basic)*
-  basic = int () / id
-  basic = ( expr )
-  *
+  stmnt = expr;
+  грамматика в2 си минус минус
+  expr = atom unaryOP BinaryOP group
+  atom = number str true false none
+  group = "(" exp ")"
+  unaryOP= !|- expr
+  binaryOP = expr op expr
+  operations = operators
+  WHILE while (expr) stament;
+  PRINT print expr;
+
+
+  грамматика в3
+  выражения
+        attribution   (ID = attribution)
+        OR            AND ( "OR" AND )
+        AND           equality ( "and" equality )
+        equality      comparison ( ( != || == ) comparison )
+        comparison    term ( ( > || >= || < || <= ) term )
+        term          factor ( ( "-" || "+" ) factor )
+        factor        unaryOP ( ( / || * ) unaryOP )
+        unaryOP       ( ! || - ) unary || call
+        call          atom ( ( args ) || . ID )
+        atom          TRUE || FALSE || none  || this
+               || NUMBER || STRING || IDENTIFIER || "(" expression ")"
  */
 public class Parser {
     private List<TokenStore> toks = new ArrayList<>();
     private int pos = -1;
     private TokenStore current;
-    private Node currBasic;
-    private Node currTerm;
+    private ASTNODE currentNode;
+    private ASTNODE resultTree;
     private static Parser parser;
     public static Parser Init(List<TokenStore> toks) {
         parser = new Parser(toks);
@@ -48,63 +64,16 @@ public class Parser {
         }
         return null;
     }
-    public Node basic() {
-        parser.advance();
-        if ((current.type).equals("NUMBER") || (current.type).equals("ID")) {
-            //System.out.println(" baza activated");
-            currBasic = new BasicNode(current);
-            parser.advance();
-            return currBasic;
-        } else if ((current.type).equals("LPRT")) {
-            while (((parser.checkNext()).type).equals("LPRT")) {
-                parser.advance();
-            }
-            BinaryOpNode temp = (BinaryOpNode) parser.expr();
-            if ((current.type).equals("RPRT")) {
-                //System.out.println(" () activated");
-                parser.advance();
-                return temp;
-            }
-        }
-        System.out.println("error something");
-        return null;
-    }
 
-    public Node term() {
-        Node left = parser.basic();
-        while ((current.type).equals("MULTIPLICATION") || (current.type).equals("DIVISION")) {
-            TokenStore op = current;
-            Node right = parser.basic();
-            left = new BinaryOpNode(left, right, op);
-        }
-        return left;
-    }
 
-    public Node expr() {
-        Node left = parser.basic();
-        while ((current.type).equals("ADDITION") || (current.type).equals("SUBTRACTION") ||  (current.type).equals("ATTRIBUTION") || (current.val).equals(">")|| (current.val).equals("<")
-                || (current.val).equals(">=")|| (current.val).equals("<=")|| (current.val).equals("<=")) {
-            TokenStore op = current;
-            Node right = parser.term();
-            if ( (op.val).equals("=")) {
-                left = new AttributionNode(left, right);
-            }
-            else  {
-            left = new BinaryOpNode(left, right, op);}
-        }
-        return left;
-    }
 
-    public Result parse() {
-        Result res = new Result(parser.expr());
-        return res;
-    }
 
     public static void main(String[] args) {
-        Lexer lex = Lexer.LexInit(" as = (1 +  (2+3)*4) + (5-6) ");
+        Lexer lex = Lexer.LexInit(" 1+2+3+(5*6) ");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser par = Parser.Init(toks);
-        System.out.println((par.parse()).toString());
+        //System.out.println(parser.parse().toString());
+        //System.out.println();
     }
 }
