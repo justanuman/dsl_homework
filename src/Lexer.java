@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Lexer {
+public class Lexer2 {
     private StringBuilder input = new StringBuilder();
     private String lexem;
     private boolean EOS = false;
@@ -13,18 +13,22 @@ public class Lexer {
     private List<TokenStore> tokenStoreList= new ArrayList<>();
     private List<Pattern> listofpatterns= new ArrayList<Pattern>();
     private List<String> listofnames= new ArrayList<>();
-    private static Lexer lexer;
-    public static Lexer LexInit(String input){
-        lexer= new Lexer( input);
+    private static Lexer2 lexer;
+    public static Lexer2 LexInit(String input){
+        lexer= new Lexer2( input);
         return lexer;
     }
-    private Lexer(String input){
+    private Lexer2(String input){
         listofpatterns.add(Pattern.compile("^" + "then"));
         listofnames.add("thenToken");
         listofpatterns.add(Pattern.compile("^" + "else"));
         listofnames.add("else");
         listofpatterns.add(Pattern.compile("^" + "fi"));
         listofnames.add("fiToken");
+        listofpatterns.add(Pattern.compile("^" + "]"));
+        listofnames.add("closeList");
+        listofpatterns.add(Pattern.compile("^" + "\\["));
+        listofnames.add("openList");
         listofpatterns.add(Pattern.compile("^" + "AND"));
         listofnames.add("AND");
         listofpatterns.add(Pattern.compile("^" + "OR"));
@@ -71,7 +75,6 @@ public class Lexer {
         listofnames.add("MOREOREQTOKEN");
         listofpatterns.add(Pattern.compile("^" + "<="));
         listofnames.add("LESSOREQTOKEN");
-
         this.input.append(input);
     }
 
@@ -139,7 +142,7 @@ public class Lexer {
 
     }
     public static void main(String[] args) {
-        Lexer lexer = new Lexer("*");
+        Lexer2 lexer = new Lexer2("*");
         while (!lexer.isOver()) {
             lexer.moveAhead();
         }

@@ -176,6 +176,11 @@ public class Parser {
             advance();
             return lit;
         }
+        if ((current.type).equals("ID") ) {
+            Variable lit = new Variable((String) current.val);
+            advance();
+            return lit;
+        }
         if ((current.val).equals("(")) {
             advance();
             ExprStm expr = expr();
@@ -197,25 +202,39 @@ public class Parser {
 
         return statements;
     }
-
-    /*private StmExpr statement() {
-        if (current.type.equals("PRINT")) return printStatement();
-
-        return expressionStatement();
+    private StmExpr statement() {
+        if (current.type.equals("PRINT"))
+        {
+            return printStatement();
+        }else{
+        return expressionStatement();}
     }
 
     private StmExpr expressionStatement() {
+
+        ExprStm ex = expr();
+
+        //System.out.println(goBack());
+
+        if(!(goBack().type.equals("semicolon"))){
+            System.out.println(";  expr stm error");
+            System.out.println(0/0);
+        }
+        return new Expression(ex);
     }
 
     private StmExpr printStatement() {
-        ExprStm value = expr();
+        //System.out.println(current.type);
         advance();
-        if(!current.val.equals(";")){
+        ExprStm value = expr();
+        System.out.println(value);
+       if(!(current.type.equals("semicolon"))){
             System.out.println("; error print");
+            System.out.println(0/0);
+           return null;
         }
-        return new StmExpr.Print(value);
-
-    }*/
+        return new Print(value);
+    }
 
     public ExprStm startSynAnal(){
         return expr();

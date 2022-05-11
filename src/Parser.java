@@ -76,4 +76,10 @@ public class Parser {
         //System.out.println(parser.parse().toString());
         //System.out.println();
     }
+
+    private  List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while (!current.type.equals("EOF")) {
+            statements.add(declaration());
+        }
 }

@@ -1,10 +1,12 @@
 import java.util.List;
 
-public class Intepreter implements Ivisit<Object>{
+public class Intepreter implements Ivisit<Object> , IStmVisit<Void> {
     private Object evaluate(ExprStm expr) {
         return expr.accept(this);
     }
-
+    private void execute(StmExpr stmt) {
+        stmt.accept(this);
+    }
     @Override
     public Object visit(Assign expr) {
         return null;
@@ -23,12 +25,12 @@ public class Intepreter implements Ivisit<Object>{
                 return (int)left * (int)right;
         }if(expr.operator.val.equals("+")){
            // System.out.println(Integer.valueOf(left.toString()));
-            //if( left instanceof Integer && right instanceof Integer){
+            if( left instanceof Integer && right instanceof Integer){
                 return (int) left + (int) right;
-            /*}
-            /*if(left instanceof String && right instanceof String){
+            }
+            if(left instanceof String && right instanceof String){
                 return (String)left + (String)right;
-           }*/
+           }
         }
         /* добавить логику для сравнений*/
         if(expr.operator.val.equals(">")){
@@ -115,20 +117,80 @@ public class Intepreter implements Ivisit<Object>{
     public Object visit(Variable expr) {
         return null;
     }
-    void interpret(ExprStm expression) {
-        Object value = evaluate(expression);
-        System.out.println(value.toString());
+
+    @Override
+    public Object visit(ListNode expr) {
+        return null;
+    }
+
+    public void interpret(List<StmExpr> statements) {
+        System.out.println("pain");
+        for(int i=0; i<statements.size();i++){
+            System.out.println("pain");
+            execute(statements.get(i));
+
+        }
+        return;
     }
 
     public static void main(String[] args) {
         Intepreter intepreter = new Intepreter();
         ExprStm expression;
-        Lexer lex = Lexer.LexInit(" 1+2*(1+7) ");
+       // Lexer lex = Lexer.LexInit("\"a\"+ \"b\"");
+        Lexer lex = Lexer.LexInit(" PRINT 2 + 1;");
         List<TokenStore> toks = lex.startLexAnal();
         System.out.println(toks.toString());
         Parser parser = new Parser(toks);
-        expression = parser.startSynAnal();
-        System.out.println(expression);
-        intepreter.interpret(expression);
+        //expression = parser.startSynAnal();
+        List<StmExpr> statements = parser.parse();
+        System.out.println(statements);
+        intepreter.interpret(statements);
+    }
+
+    @Override
+    public Void visit(Block StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(Expression StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(Function StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(If StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(Print StmExpr) {
+        Object value = evaluate(StmExpr.Expression);
+        System.out.println(value.toString());
+        return null;
+    }
+
+    @Override
+    public Void visit(Return StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(Var StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(While StmExpr) {
+        return null;
+    }
+
+    @Override
+    public Void visit(ListN StmExpr) {
+        return null;
     }
 }

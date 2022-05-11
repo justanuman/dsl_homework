@@ -254,9 +254,9 @@ class UnaryOP extends ExprStm {
 }
 
 class Variable extends ExprStm {
-    TokenStore name;
+    String name;
 
-    Variable(TokenStore name) {
+    Variable(String name) {
         this.name = name;
     }
 
@@ -272,3 +272,19 @@ class Variable extends ExprStm {
                 '}';
     }
 }
+class ListNode extends ExprStm{
+        TokenStore name;
+        List<Object> val;
+        ListNode(TokenStore name,List<Object> val){
+            this.name=name;
+            this.val=val;
+        }
+
+    @Override
+    <R> R accept(Ivisit<R> visitor) {
+        return visitor.visit(this);
+    }
+}
+/*class ListLink extends ExprStm{
+
+}*/

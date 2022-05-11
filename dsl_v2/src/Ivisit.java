@@ -11,4 +11,5 @@ public interface Ivisit<R> {
         R visit(This expr);
         R visit(UnaryOP expr);
         R visit(Variable expr);
+        R visit(ListNode expr);
     }
